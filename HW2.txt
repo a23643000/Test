@@ -1,0 +1,41 @@
+HW2.pig
+
+a = load 'userdemand.tsv';
+b = filter a by $3 != 'Untitled';
+c = group b by ($3,$2);
+d = foreach c generate flatten($0) , count($1);
+
+
+
+
+a = load 'userprofile.tsv';
+b = load 'userdemand.tsv';
+c = join a by $0, b by $0;
+d = filter c by $3=='United States' and $8 != 'Untitled';
+e = foreach d generate $8,$0;
+f = distinct e
+g = group f by $0;
+h = foreach g generate $0,COUNT($1);
+i = order h by $1 desc;
+j = limit i 5;
+k = foreach d generate $8,$7;
+l = filter k by ($0 == 'Intro') or ($0 == 'Such Great Heights') or ($0 == 'Home') or ($0 == 'Breathe') or ($0 == 'Wake Up');
+m = group l by ($0,$1);
+n = foreach m generate flatten($0), COUNT($1);
+o = join n by $0, j by $0;
+p = order o by $2 desc, $0;
+q = foreach p generate $0, $1, $2;
+dump q
+
+
+
+
+
+
+
+
+
+c = join a by $0, b by $0;
+e = group d by ($8,$7);
+f = distinct e;
+g = fireach f generate flatten($0),count($1);
